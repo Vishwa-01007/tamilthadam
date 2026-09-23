@@ -1,12 +1,17 @@
 import { createServer } from "node:http";
 import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
-import { readFile, writeFile, rename } from "node:fs/promises";
+import { readFile, writeFile, rename, stat, mkdir } from "node:fs/promises";
+import { extname, join, resolve, sep } from "node:path";
+import { fileURLToPath } from "node:url";
 import { OAuth2Client } from "google-auth-library";
 
 const scrypt = promisify(scryptCallback);
-const PORT = Number(process.env.API_PORT || 3001);
-const STORE_PATH = new URL("./server-data.json", import.meta.url);
+const PORT = Number(process.env.PORT || process.env.API_PORT || 3001);
+const APP_DIR = fileURLToPath(new URL(".", import.meta.url));
+const DATA_DIR = process.env.DATA_DIR || APP_DIR;
+const STORE_PATH = join(DATA_DIR, "server-data.json");
+const DIST_DIR = join(APP_DIR, "dist");
 const sessions = new Map();
 const googleVerifier = new OAuth2Client();
 
@@ -31,7 +36,8 @@ async function readStore() {
 }
 
 async function writeStore(store) {
-  const temporary = new URL("./server-data.tmp.json", import.meta.url);
+  await mkdir(DATA_DIR, { recursive: true });
+  const temporary = join(DATA_DIR, "server-data.tmp.json");
   await writeFile(temporary, JSON.stringify(store, null, 2), "utf8");
   await rename(temporary, STORE_PATH);
 }
@@ -61,7 +67,8 @@ function getSessionUser(request) {
 }
 
 function sessionCookie(token) {
-  return `tt_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800`;
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `tt_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800${secure}`;
 }
 
 async function createAccount(username, password) {
@@ -191,6 +198,20 @@ async function route(request, response) {
     });
   }
 
+  if ((request.method === "GET" || request.method === "HEAD") && !url.pathname.startsWith("/api/")) {
+    const requestedPath = decodeURIComponent(url.pathname);
+    const candidate = resolve(DIST_DIR, "." + requestedPath);
+    if (candidate !== DIST_DIR && !candidate.startsWith(DIST_DIR + sep)) return send(response, 400, { error: "Invalid path." });
+    let filePath = candidate;
+    try { if (!(await stat(filePath)).isFile()) filePath = join(DIST_DIR, "index.html"); } catch { filePath = join(DIST_DIR, "index.html"); }
+    try {
+      const content = await readFile(filePath);
+      const types = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".ico": "image/x-icon", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".mp3": "audio/mpeg", ".png": "image/png", ".svg": "image/svg+xml", ".webp": "image/webp" };
+      response.writeHead(200, { "Content-Type": types[extname(filePath).toLowerCase()] || "application/octet-stream", "Cache-Control": filePath.endsWith("index.html") ? "no-cache" : "public, max-age=31536000, immutable" });
+      return response.end(request.method === "HEAD" ? undefined : content);
+    } catch { return send(response, 404, { error: "Page not found. Build the website before starting the server." }); }
+  }
+
   const session = getSessionUser(request);
   if (!session) return send(response, 401, { error: "Please sign in to continue." });
 
@@ -259,6 +280,6 @@ const server = createServer((request, response) => {
   });
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  console.log(`TamilThadam API listening on http://127.0.0.1:${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`TamilThadam listening on port ${PORT}`);
 });
