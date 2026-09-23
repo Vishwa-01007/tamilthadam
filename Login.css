@@ -1,0 +1,236 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: linear-gradient(135deg, #eef8f0 0%, #dcefe1 100%);
+  font-family: Arial, sans-serif;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 950px;
+  min-height: 560px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(30, 80, 45, 0.15);
+}
+
+/* Left side */
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+  background: #166534;
+  color: #d1fae5;
+}
+
+.login-logo {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  border-radius: 50%;
+  background: white;
+  color: #166534;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.login-brand h1 {
+  margin: 0 0 18px;
+  font-size: 42px;
+}
+
+.login-brand p {
+  max-width: 350px;
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.7;
+}
+
+/* Right side */
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 55px;
+}
+
+.login-content h2 {
+  margin: 0 0 10px;
+  color: #16351f;
+  font-size: 30px;
+}
+
+.login-content > p {
+  margin: 0 0 32px;
+  color: #64748b;
+  font-size: 16px;
+}
+
+.login-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-content label {
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-content input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-content input:focus {
+  border-color: #22a447;
+  box-shadow: 0 0 0 3px rgba(34, 164, 71, 0.12);
+}
+
+.login-content form button {
+  margin-top: 8px;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #198754;
+  color: #d1fae5;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.login-content form button:hover:not(:disabled) {
+  background: #146c43;
+  transform: translateY(-1px);
+}
+
+.login-content form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.login-error {
+  margin: -8px 0 12px;
+  color: #a12a26;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 21px 0 17px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e2e8e3;
+}
+
+.google-signin-wrap {
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.google-signin-setup {
+  margin: 0 !important;
+  padding: 12px;
+  border: 1px solid #e4ebe5;
+  border-radius: 9px;
+  color: #64746a !important;
+  background: #f8fbf8;
+  text-align: center;
+  font-size: 12px !important;
+  line-height: 1.5;
+}
+
+.login-note {
+  margin-top: 24px !important;
+  text-align: center;
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+}
+
+.login-content .login-mode-toggle {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #198754;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.login-content .login-mode-toggle:hover {
+  color: #146c43;
+  background: transparent;
+  transform: none;
+}
+
+/* Mobile */
+
+@media (max-width: 750px) {
+  .login-page {
+    padding: 20px;
+  }
+
+  .login-card {
+    grid-template-columns: 1fr;
+  }
+
+  .login-brand {
+    padding: 35px 25px;
+  }
+
+  .login-brand h1 {
+    font-size: 32px;
+  }
+
+  .login-brand p {
+    font-size: 17px;
+  }
+
+  .login-logo {
+    width: 70px;
+    height: 70px;
+    font-size: 36px;
+  }
+
+  .login-content {
+    padding: 35px 25px;
+  }
+}

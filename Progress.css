@@ -1,0 +1,672 @@
+/* =====================================================
+   PROGRESS PAGE
+===================================================== */
+
+.progress-page {
+  min-height: 100vh;
+  background: #f7f9f6;
+  padding: 40px 8%;
+  color: #18301f;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.progress-header {
+  max-width: 1050px;
+  margin: 0 auto 30px;
+}
+
+.progress-back {
+  border: none;
+  background: #ffffff;
+  color: #356b3c;
+  padding: 11px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  transition: 0.2s ease;
+}
+
+.progress-back:hover {
+  background: #edf5ed;
+  transform: translateY(-1px);
+}
+
+.progress-badge {
+  display: inline-block;
+  background: #e8f3e8;
+  color: #356b3c;
+  padding: 7px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.progress-header h1 {
+  font-size: 40px;
+  margin: 15px 0 8px;
+  line-height: 1.15;
+}
+
+.progress-header p {
+  color: #69756c;
+  font-size: 16px;
+  margin: 0;
+}
+
+
+/* =====================================================
+   OVERALL PROGRESS
+===================================================== */
+
+.overall-card {
+  max-width: 1050px;
+  margin: 0 auto 25px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 35px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.overall-circle {
+  width: 155px;
+  height: 155px;
+  min-width: 155px;
+  border-radius: 50%;
+  background: #e9f3e9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.overall-circle strong {
+  color: #356b3c;
+  font-size: 38px;
+  line-height: 1;
+}
+
+.overall-circle span {
+  color: #718071;
+  font-size: 13px;
+  margin-top: 7px;
+}
+
+.overall-info {
+  flex: 1;
+}
+
+.overall-info h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.overall-info p {
+  color: #707970;
+  margin: 0 0 18px;
+}
+
+.large-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e5ebe5;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.large-progress-bar div {
+  height: 100%;
+  background: #4f8a55;
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+.overall-info > span {
+  display: block;
+  color: #788078;
+  font-size: 13px;
+  margin-top: 9px;
+}
+
+
+/* =====================================================
+   SUMMARY CARDS
+===================================================== */
+
+.progress-summary {
+  max-width: 1050px;
+  margin: 0 auto 35px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.summary-card {
+  background: #ffffff;
+  border-radius: 17px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+}
+
+.summary-card > span {
+  display: block;
+  font-size: 29px;
+  margin-bottom: 9px;
+}
+
+.summary-card strong {
+  display: block;
+  color: #356b3c;
+  font-size: 21px;
+  margin-bottom: 5px;
+}
+
+.summary-card p {
+  color: #778078;
+  font-size: 13px;
+  margin: 0;
+}
+
+
+/* =====================================================
+   LEARNING STATISTICS
+===================================================== */
+
+.progress-section {
+  max-width: 1050px;
+  margin: 0 auto 32px;
+}
+
+.progress-section > h2 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+.progress-section > p {
+  color: #747d75;
+  margin: 0;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 17px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 17px;
+  padding: 22px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+  transition: 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.stat-top > span {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: #eef5ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.stat-top strong {
+  display: block;
+  font-size: 20px;
+  color: #1d3323;
+}
+
+.stat-top small {
+  display: block;
+  color: #788078;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.stat-bar {
+  width: 100%;
+  height: 8px;
+  background: #e6ebe6;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.stat-bar div {
+  height: 100%;
+  background: #4f8a55;
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+
+/* =====================================================
+   CERTIFICATE SECTION
+===================================================== */
+
+.certificate-section {
+  max-width: 1050px;
+  margin: 0 auto;
+}
+
+.certificate-locked,
+.certificate-unlocked {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.certificate-locked {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.certificate-unlocked {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.certificate-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 14px;
+  background: #eef5ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.certificate-locked h2,
+.certificate-unlocked h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+
+.certificate-locked p,
+.certificate-unlocked p {
+  margin: 0;
+  color: #707970;
+  line-height: 1.5;
+}
+
+.certificate-locked > span {
+  margin-left: auto;
+  background: #edf0ed;
+  color: #6e776f;
+  padding: 9px 15px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   CERTIFICATE FORM
+===================================================== */
+
+.certificate-form {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.certificate-form label {
+  width: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  color: #26372b;
+}
+
+.certificate-form input {
+  flex: 1;
+  min-width: 220px;
+  padding: 13px 15px;
+  border: 1px solid #d9dfd9;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.certificate-form input:focus {
+  border-color: #4f8a55;
+  box-shadow: 0 0 0 3px rgba(79, 138, 85, 0.1);
+}
+
+.certificate-form button {
+  border: none;
+  background: #356b3c;
+  color: #d1fae5;
+  padding: 13px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.certificate-form button:hover {
+  background: #2d5c33;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   CERTIFICATE PAGE
+===================================================== */
+
+.certificate {
+  max-width: 850px;
+  margin: 50px auto;
+  background: #ffffff;
+  border: 10px solid #e8f0e7;
+  outline: 2px solid #356b3c;
+  padding: 60px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.certificate-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #356b3c;
+  font-size: 22px;
+}
+
+.certificate-logo span {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #356b3c;
+  color: #d1fae5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.certificate-label {
+  margin-top: 35px;
+  letter-spacing: 3px;
+  font-size: 13px;
+  color: #667066;
+}
+
+.certificate h1 {
+  font-size: 34px;
+  margin: 15px 0 20px;
+}
+
+.certificate-text {
+  color: #6d756e;
+  line-height: 1.6;
+}
+
+.certificate-name {
+  display: inline-block;
+  font-size: 35px;
+  color: #356b3c;
+  border-bottom: 2px solid #356b3c;
+  padding: 0 40px 8px;
+  margin: 15px 0;
+}
+
+.certificate-completion {
+  margin: 30px auto;
+  width: 180px;
+  padding: 18px;
+  background: #eef5ed;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
+.certificate-completion strong {
+  display: block;
+  font-size: 30px;
+  color: #356b3c;
+}
+
+.certificate-completion span {
+  display: block;
+  font-size: 12px;
+  color: #69736b;
+  margin-top: 5px;
+}
+
+.certificate-date {
+  color: #737c74;
+  font-size: 13px;
+}
+
+.certificate-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  color: #356b3c;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .progress-page {
+    padding: 25px 5%;
+  }
+
+  .progress-header h1 {
+    font-size: 30px;
+  }
+
+  .overall-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 22px;
+  }
+
+  .overall-circle {
+    width: 135px;
+    height: 135px;
+    min-width: 135px;
+  }
+
+  .overall-circle strong {
+    font-size: 32px;
+  }
+
+  .progress-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .certificate-locked {
+    flex-wrap: wrap;
+  }
+
+  .certificate-locked > span {
+    margin-left: 0;
+  }
+
+  .certificate {
+    padding: 35px 18px;
+  }
+
+  .certificate h1 {
+    font-size: 27px;
+  }
+
+  .certificate-name {
+    font-size: 27px;
+    padding: 0 15px 8px;
+  }
+
+  .certificate-footer {
+    margin-top: 35px;
+  }
+
+  .certificate-form {
+    flex-direction: column;
+  }
+
+  .certificate-form input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .certificate-form button {
+    width: 100%;
+  }
+}
+.progress-page {
+  position: relative;
+  padding-top: 92px;
+}
+
+.progress-back {
+  position: fixed;
+  top: 20px;
+  left: 24px;
+  z-index: 50;
+  margin: 0;
+}
+
+.certificate h2 {
+  color: #111111;
+}
+
+.certificate h1 {
+  color: #27864c;
+  overflow-wrap: anywhere;
+}
+
+.certificate-download {
+  display: block;
+  margin: -28px auto 45px;
+  padding: 13px 22px;
+  border: 0;
+  border-radius: 11px;
+  color: #fff;
+  background: #27864c;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(39, 134, 76, 0.18);
+}
+
+.certificate-download:hover {
+  background: #1f713f;
+}
+
+.certificate-download:focus-visible {
+  outline: 3px solid #8bc79a;
+  outline-offset: 3px;
+}
+
+.journey-final-milestone {
+  max-width: 1050px;
+  margin: 28px auto;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #cfe5d2;
+  border-radius: 18px;
+  background: #edf7ed;
+  color: #245c35;
+}
+
+.final-milestone-icon {
+  flex: 0 0 auto;
+  font-size: 38px;
+}
+
+.final-milestone-copy {
+  flex: 1;
+}
+
+.final-milestone-copy h2 {
+  margin: 8px 0 5px;
+  color: #27864c;
+  font-size: 22px;
+}
+
+.final-milestone-copy p {
+  color: #53695a;
+  line-height: 1.5;
+}
+
+.journey-final-milestone > button {
+  flex: 0 0 auto;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 10px;
+  color: white;
+  background: #27864c;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.journey-final-milestone > button:disabled {
+  color: #66736a;
+  background: #dfe7e0;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .journey-final-milestone {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 18px;
+  }
+
+  .journey-final-milestone > button {
+    margin-left: 54px;
+  }
+}

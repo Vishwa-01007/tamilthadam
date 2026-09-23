@@ -1,0 +1,337 @@
+.writing-page {
+  min-height: 100vh;
+  padding: 30px 20px 60px;
+  background: #f4f8f5;
+  box-sizing: border-box;
+}
+
+.writing-back {
+  border: none;
+  background: transparent;
+  color: #176b3a;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.writing-back:hover {
+  text-decoration: underline;
+}
+
+.writing-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.writing-header > p:first-child {
+  color: #176b3a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.writing-header h1 {
+  margin: 0;
+  color: #123b25;
+  font-size: 36px;
+}
+
+.writing-header > p:last-child {
+  color: #66756c;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.writing-card {
+  width: min(850px, 100%);
+  margin: auto;
+  padding: 35px;
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.writing-progress {
+  display: flex;
+  justify-content: space-between;
+  color: #526158;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 9px;
+}
+
+.writing-progress-bar {
+  width: 100%;
+  height: 9px;
+  background: #e4ebe6;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.writing-progress-fill {
+  height: 100%;
+  background: #1b8b50;
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+.writing-badge {
+  display: inline-block;
+  padding: 7px 15px;
+  border-radius: 30px;
+  background: #e6f4eb;
+  color: #176b3a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.writing-card h2 {
+  margin: 17px 0 10px;
+  color: #123b25;
+  font-size: 25px;
+}
+
+.writing-letter {
+  margin: 10px auto;
+  color: #176b3a;
+  font-family:
+    "Noto Sans Tamil",
+    "Nirmala UI",
+    "Latha",
+    sans-serif;
+  font-size: 90px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.writing-instruction {
+  color: #68756e;
+  margin-bottom: 18px;
+}
+
+.writing-canvas-wrapper {
+  position: relative;
+  width: min(650px, 100%);
+  height: 360px;
+  margin: auto;
+  border: 3px dashed #a8c7b2;
+  border-radius: 18px;
+  background: #fbfdfb;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.writing-guide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(23, 107, 58, 0.13);
+
+  font-family:
+    "Noto Sans Tamil",
+    "Nirmala UI",
+    "Latha",
+    sans-serif;
+
+  font-size: 190px;
+  font-weight: 600;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.writing-canvas {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.writing-feedback {
+  margin: 20px 0 0;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.writing-feedback.correct {
+  background: #e7f7ec;
+  color: #176b3a;
+}
+
+.writing-feedback.wrong {
+  background: #fff8e7;
+  color: #745416;
+  border: 1px solid #f1dfac;
+}
+
+.feedback-emoji {
+  display: inline-block;
+  margin-right: 7px;
+  animation: encouragement-bob 1.1s ease-in-out infinite;
+}
+
+.writing-celebration {
+  margin: -5px 0 12px;
+  font-size: 24px;
+  letter-spacing: 8px;
+  animation: celebration-pop 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes encouragement-bob {
+  50% { transform: translateY(-3px) rotate(-8deg); }
+}
+
+@keyframes celebration-pop {
+  from { transform: scale(0.96); }
+  to { transform: scale(1.08); }
+}
+
+.writing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.clear-button,
+.writing-start {
+  min-width: 145px;
+  padding: 13px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.clear-button {
+  border: 1px solid #cbd8cf;
+  background: white;
+  color: #176b3a;
+}
+
+.clear-button:hover {
+  background: #f1f7f3;
+}
+
+.writing-start {
+  border: none;
+  background: #1b8b50;
+  color: #d1fae5;
+}
+
+.writing-start:hover {
+  background: #176b3a;
+  transform: translateY(-1px);
+}
+
+.writing-complete-icon {
+  font-size: 70px;
+  margin: 10px 0;
+}
+
+.writing-card > p {
+  color: #66756c;
+}
+
+@media (max-width: 700px) {
+  .writing-page {
+    padding: 20px 12px 40px;
+  }
+
+  .writing-card {
+    padding: 22px 15px;
+    border-radius: 16px;
+  }
+
+  .writing-header h1 {
+    font-size: 28px;
+  }
+
+  .writing-letter {
+    font-size: 70px;
+  }
+
+  .writing-canvas-wrapper {
+    height: 300px;
+  }
+
+  .writing-guide {
+    font-size: 155px;
+  }
+
+  .writing-actions {
+    flex-direction: column;
+  }
+
+  .clear-button,
+  .writing-start {
+    width: 100%;
+  }
+  .skip-button {
+  min-width: 145px;
+  padding: 13px 22px;
+  border-radius: 10px;
+  border: 1px solid #cbd8cf;
+  background: #f7faf8;
+  color: #526158;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.skip-button:hover {
+  background: #edf3ef;
+  color: #176b3a;
+  transform: translateY(-1px);
+}
+.writing-guide {
+  white-space: nowrap;
+}
+
+.writing-letter {
+  font-family:
+    "Noto Sans Tamil",
+    "Nirmala UI",
+    "Latha",
+    sans-serif;
+}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-emoji,
+  .writing-celebration {
+    animation: none;
+  }
+}
+.writing-page {
+  position: relative;
+  padding-top: 84px;
+}
+
+.writing-back {
+  position: fixed;
+  top: 20px;
+  left: 24px;
+  z-index: 50;
+  margin: 0;
+}

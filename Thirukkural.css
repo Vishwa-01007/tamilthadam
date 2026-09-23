@@ -1,0 +1,261 @@
+.kural-page {
+  min-height: 100vh;
+  padding: 38px 7%;
+  color: #16351f;
+  background: #f4faf5;
+}
+
+.kural-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.kural-back {
+  min-height: 42px;
+  margin-bottom: 24px;
+  padding: 9px 15px;
+  border: 1px solid #d8e7db;
+  border-radius: 10px;
+  color: #166534;
+  background: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kural-back:hover {
+  background: #ecf7ee;
+}
+
+.kural-header {
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.kural-eyebrow {
+  display: inline-block;
+  padding: 7px 13px;
+  border-radius: 99px;
+  color: #166534;
+  background: #dcfce7;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.kural-header h1 {
+  margin: 14px 0 8px;
+  color: #166534;
+  font-size: 40px;
+}
+
+.kural-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 16px;
+}
+
+.kural-list {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.kural-card {
+  min-height: 290px;
+  padding: 30px;
+  border: 1px solid #dce8df;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(22, 101, 52, 0.06);
+}
+
+.kural-number {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 99px;
+  color: #166534;
+  background: #e9f5eb;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.kural-couplet {
+  margin: 20px 0 24px;
+  color: #166534;
+  font-family: "Noto Sans Tamil", "Latha", sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.kural-meaning {
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #f1f8f2;
+}
+
+.kural-meaning strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #27864c;
+  font-size: 14px;
+}
+
+.kural-meaning p {
+  margin: 0;
+  color: #405d48;
+  font-family: "Noto Sans Tamil", "Latha", sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.kural-pagination {
+  max-width: 760px;
+  margin: 20px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.kural-pagination button {
+  min-width: 122px;
+  padding: 11px 16px;
+  border: 1px solid #cfe2d2;
+  border-radius: 10px;
+  color: #166534;
+  background: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kural-pagination button:hover:not(:disabled) {
+  background: #e9f5eb;
+}
+
+.kural-pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.kural-page-count {
+  color: #647b69;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.kural-footer-note {
+  margin: 24px 0 0;
+  color: #647b69;
+  text-align: center;
+  font-size: 14px;
+}
+
+@media (max-width: 760px) {
+  .kural-page {
+    padding: 24px 5%;
+  }
+
+  .kural-card {
+    min-height: 0;
+    padding: 22px 18px;
+  }
+
+  .kural-header h1 {
+    font-size: 34px;
+  }
+
+  .kural-couplet {
+    font-size: 19px;
+  }
+
+  .kural-pagination button {
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+.kural-page {
+  position: relative;
+  padding-top: 84px;
+}
+
+.kural-back {
+  position: fixed;
+  top: 20px;
+  left: 24px;
+  z-index: 50;
+  margin: 0;
+}
+
+.kural-progress-note {
+  margin-top: 12px !important;
+  color: #27864c !important;
+  font-size: 14px !important;
+  font-weight: 700;
+}
+
+.kural-mark-read {
+  display: block;
+  margin: 22px auto 0;
+  padding: 12px 18px;
+  border: 1px solid #b9d8c0;
+  border-radius: 10px;
+  color: #176b3a;
+  background: #edf7ef;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kural-mark-read.is-read {
+  border-color: #27864c;
+  color: #fff;
+  background: #27864c;
+  cursor: default;
+}
+
+.kural-milestone {
+  max-width: 760px;
+  margin: 18px auto 0;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #cfe5d2;
+  border-radius: 16px;
+  background: #edf7ed;
+  color: #245c35;
+}
+
+.kural-milestone > span {
+  font-size: 30px;
+}
+
+.kural-milestone p {
+  margin-top: 4px;
+  color: #53695a;
+  font-size: 13px;
+}
+
+.kural-milestone button {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 11px 15px;
+  border: 0;
+  border-radius: 10px;
+  background: #27864c;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .kural-milestone {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .kural-milestone button {
+    margin-left: 44px;
+  }
+}

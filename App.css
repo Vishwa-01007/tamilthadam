@@ -1,0 +1,563 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap");
+
+:root {
+  font-family: "Inter", "Noto Sans Tamil", sans-serif;
+  color: #17251d;
+  background: #f7faf7;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.app {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 80% 10%, #e4f5e7 0, transparent 30%),
+    #f7faf7;
+}
+
+/* NAVBAR */
+
+.navbar {
+  height: 76px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(247, 250, 247, 0.9);
+  border-bottom: 1px solid #e1ebe3;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.logo > span:last-child > span {
+  color: #27864c;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: #27864c;
+  color: #d1fae5;
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 22px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 34px;
+}
+
+.nav-links a {
+  color: #53635a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nav-links a:hover {
+  color: #27864c;
+}
+
+.login-btn {
+  border: 1px solid #cbd9ce;
+  background: white;
+  border-radius: 10px;
+  padding: 10px 19px;
+  color: #25352b;
+  font-weight: 600;
+}
+
+.profile-nav-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: #e9f5eb;
+  color: #176b3a;
+  font-weight: 700;
+}
+
+.profile-nav-btn:hover {
+  background: #d8eddc;
+}
+
+/* HERO */
+
+.hero {
+  max-width: 1180px;
+  margin: auto;
+  min-height: 650px;
+  padding: 90px 30px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 13px;
+  border-radius: 30px;
+  background: #e4f3e7;
+  color: #277a45;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.hero h1 {
+  margin: 22px 0 20px;
+  font-size: clamp(48px, 6vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -3px;
+  color: #166534;
+}
+
+.hero h1 span {
+  color: #27864c;
+}
+
+.hero-content > p {
+  max-width: 580px;
+  color: #65736b;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 13px;
+  margin-top: 30px;
+}
+
+.primary-btn,
+.secondary-btn {
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.primary-btn {
+  border: none;
+  background: #27864c;
+  color: #d1fae5;
+  box-shadow: 0 8px 25px rgba(39, 134, 76, 0.22);
+}
+
+.primary-btn:hover {
+  background: #1f713f;
+}
+
+.secondary-btn {
+  border: 1px solid #cbd9ce;
+  background: white;
+  color: #34443a;
+}
+
+.stats {
+  display: flex;
+  gap: 38px;
+  margin-top: 48px;
+}
+
+.stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stats strong {
+  font-size: 19px;
+}
+
+.stats span {
+  color: #7b8780;
+  font-size: 12px;
+}
+
+/* HERO CARD */
+
+.hero-card {
+  background: white;
+  padding: 27px;
+  border: 1px solid #dfe9e1;
+  border-radius: 25px;
+  box-shadow: 0 25px 70px rgba(40, 72, 51, 0.12);
+  text-align: center;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: #536158;
+}
+
+.progress-text {
+  color: #27864c;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e8eee9;
+  border-radius: 20px;
+  margin: 15px 0 30px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 12%;
+  height: 100%;
+  background: #27864c;
+  border-radius: 20px;
+}
+
+.letter-display {
+  width: 170px;
+  height: 170px;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #eef8f0;
+font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 90px;
+  font-weight: 600;
+  color: #27864c;
+}
+
+.tamil-example {
+  margin: 22px 0 4px;
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.example-meaning {
+  margin: 0;
+  color: #7c8981;
+  font-size: 13px;
+}
+
+.heritage-art {
+  margin: 20px 0 0;
+  overflow: hidden;
+  border: 1px solid #e5ece5;
+  border-radius: 13px;
+  background: #f6f8f3;
+  text-align: left;
+}
+
+.heritage-art img {
+  display: block;
+  width: 100%;
+  height: 88px;
+  object-fit: cover;
+  object-position: center 54%;
+  filter: sepia(0.16) saturate(0.86);
+}
+
+.heritage-art figcaption {
+  padding: 8px 10px;
+  color: #647166;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.heritage-art figcaption a {
+  color: #27864c;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.heritage-art figcaption a:hover {
+  text-decoration: underline;
+}
+
+.card-button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+  border: none;
+  border-radius: 11px;
+  background: #f0f7f1;
+  color: #277a45;
+  font-weight: 700;
+}
+
+/* JOURNEY */
+
+.journey {
+  padding: 100px 7%;
+  background: white;
+}
+
+.section-heading {
+  max-width: 650px;
+  margin: auto;
+  text-align: center;
+}
+
+.section-heading h2,
+.about h2 {
+  margin: 18px 0 10px;
+  font-size: 42px;
+  letter-spacing: -1.5px;
+}
+
+.section-heading h2 {
+  color: #27864c;
+}
+
+.section-heading p {
+  color: #718078;
+  line-height: 1.7;
+}
+
+.learning-grid {
+  max-width: 1180px;
+  margin: 50px auto 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+.learning-card {
+  position: relative;
+  padding: 23px;
+  min-height: 278px;
+  border: 1px solid #dce8df;
+  border-radius: 18px;
+  background: #fbfdfb;
+  transition: 0.2s;
+}
+
+.learning-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(42, 78, 53, 0.09);
+}
+
+.learning-card.locked {
+  opacity: 0.62;
+}
+
+.card-number {
+  color: #a2aea6;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.stage-icon {
+  margin-top: 20px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #e9f5eb;
+  color: #27864c;
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 25px;
+}
+
+.learning-card h3 {
+  margin: 18px 0 7px;
+  font-size: 16px;
+}
+
+.learning-card p {
+  margin: 0;
+  color: #78847d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.learning-card .milestone-status {
+  margin-top: 10px;
+  color: #577160;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.learning-card .milestone-status.complete {
+  color: #176b3a;
+}
+
+.learning-card button {
+  position: absolute;
+  bottom: 20px;
+  left: 23px;
+  border: none;
+  background: transparent;
+  color: #27864c;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.learning-card button:disabled {
+  color: #727d75;
+  cursor: not-allowed;
+}
+
+/* ABOUT */
+
+.about {
+  max-width: 1100px;
+  margin: auto;
+  padding: 100px 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.about h2 {
+  font-size: 40px;
+  color: #27864c;
+}
+
+.about-text {
+  max-width: 650px;
+}
+
+.about-text p {
+  margin-bottom: 22px;
+  color: #53635a;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* FOOTER */
+
+footer {
+  padding: 35px 7%;
+  border-top: 1px solid #dfe8e1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #7b8780;
+  font-size: 12px;
+  background: white;
+}
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    padding-top: 60px;
+  }
+
+  .learning-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 520px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .hero {
+    padding: 50px 20px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .stats {
+    gap: 18px;
+  }
+
+  .learning-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .journey {
+    padding: 70px 20px;
+  }
+
+  .section-heading h2,
+  .about h2 {
+  max-width: 600px;
+  margin-top: 18px;
+  font-size: 42px;
+  line-height: 1.15;
+  color: #27864c;
+}
+  @media (max-width: 800px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .nav-links {
+  display: flex !important;
+  order: 3;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+}
+
+  .nav-links a {
+    font-size: 14px;
+  }
+
+  .login-btn {
+    margin-left: auto;
+  }
+}
+}
