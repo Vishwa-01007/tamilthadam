@@ -5,6 +5,7 @@ import { readFile, writeFile, rename, stat, mkdir } from "node:fs/promises";
 import { extname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { OAuth2Client } from "google-auth-library";
+import pg from "pg";
 
 const scrypt = promisify(scryptCallback);
 const PORT = Number(process.env.PORT || process.env.API_PORT || 3001);
@@ -14,6 +15,50 @@ const STORE_PATH = join(DATA_DIR, "server-data.json");
 const DIST_DIR = join(APP_DIR, "dist");
 const sessions = new Map();
 const googleVerifier = new OAuth2Client();
+const pool = process.env.DATABASE_URL
+  ? new pg.Pool({ connectionString: process.env.DATABASE_URL })
+  : null;
+let databaseReady;
+
+async function initializeDatabase() {
+  if (!pool) return;
+  databaseReady ||= pool.query(`
+    CREATE TABLE IF NOT EXISTS learners (
+      auth_key TEXT PRIMARY KEY,
+      id TEXT NOT NULL UNIQUE,
+      username VARCHAR(40) NOT NULL,
+      display_name VARCHAR(40) NOT NULL,
+      email VARCHAR(254) NOT NULL DEFAULT '',
+      age SMALLINT,
+      salt TEXT,
+      password_hash TEXT,
+      auth_provider TEXT NOT NULL DEFAULT 'password',
+      google_subject TEXT UNIQUE,
+      progress JSONB NOT NULL DEFAULT '{}'::jsonb,
+      activity JSONB NOT NULL DEFAULT '[]'::jsonb,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      last_login_at TIMESTAMPTZ,
+      last_active_at TIMESTAMPTZ
+    )
+  `);
+  await databaseReady;
+}
+
+function recordActivity(user, type, stage = "") {
+  const at = new Date().toISOString();
+  user.createdAt ||= at;
+  user.lastActiveAt = at;
+  user.activity ||= [];
+  user.activity.unshift({ type, stage, at });
+  user.activity = user.activity.slice(0, 100);
+}
+
+function isAdminUser(user) {
+  const usernames = (process.env.ADMIN_USERNAMES || "").split(",").map((value) => value.trim().toLocaleLowerCase()).filter(Boolean);
+  const emails = (process.env.ADMIN_EMAILS || "").split(",").map((value) => value.trim().toLocaleLowerCase()).filter(Boolean);
+  return usernames.includes(String(user.username || "").toLocaleLowerCase()) ||
+    emails.includes(String(user.email || "").toLocaleLowerCase());
+}
 
 async function getGoogleClientId() {
   if (process.env.GOOGLE_CLIENT_ID) return process.env.GOOGLE_CLIENT_ID;
@@ -27,6 +72,28 @@ async function getGoogleClientId() {
 }
 
 async function readStore() {
+  if (pool) {
+    await initializeDatabase();
+    const { rows } = await pool.query("SELECT * FROM learners");
+    return {
+      users: Object.fromEntries(rows.map((row) => [row.auth_key, {
+        id: row.id,
+        username: row.username,
+        displayName: row.display_name,
+        email: row.email,
+        age: row.age,
+        salt: row.salt,
+        passwordHash: row.password_hash,
+        authProvider: row.auth_provider,
+        googleSubject: row.google_subject,
+        progress: row.progress || {},
+        activity: row.activity || [],
+        createdAt: row.created_at?.toISOString?.() || row.created_at,
+        lastLoginAt: row.last_login_at?.toISOString?.() || row.last_login_at,
+        lastActiveAt: row.last_active_at?.toISOString?.() || row.last_active_at,
+      }])) ,
+    };
+  }
   try {
     return JSON.parse(await readFile(STORE_PATH, "utf8"));
   } catch (error) {
@@ -36,6 +103,36 @@ async function readStore() {
 }
 
 async function writeStore(store) {
+  if (pool) {
+    await initializeDatabase();
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      for (const [key, user] of Object.entries(store.users)) {
+        await client.query(`
+          INSERT INTO learners
+            (auth_key, id, username, display_name, email, age, salt, password_hash, auth_provider, google_subject, progress, activity, created_at, last_login_at, last_active_at)
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,$12::jsonb,$13,$14,$15)
+          ON CONFLICT (auth_key) DO UPDATE SET
+            username=EXCLUDED.username, display_name=EXCLUDED.display_name, email=EXCLUDED.email,
+            age=EXCLUDED.age, salt=EXCLUDED.salt, password_hash=EXCLUDED.password_hash,
+            auth_provider=EXCLUDED.auth_provider, google_subject=EXCLUDED.google_subject,
+            progress=EXCLUDED.progress, activity=EXCLUDED.activity,
+            last_login_at=EXCLUDED.last_login_at, last_active_at=EXCLUDED.last_active_at
+        `, [key, user.id, user.username, user.displayName || user.username, user.email || "", user.age ?? null,
+          user.salt || null, user.passwordHash || null, user.authProvider || "password", user.googleSubject || null,
+          JSON.stringify(user.progress || {}), JSON.stringify(user.activity || []), user.createdAt || new Date().toISOString(),
+          user.lastLoginAt || null, user.lastActiveAt || null]);
+      }
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+    return;
+  }
   await mkdir(DATA_DIR, { recursive: true });
   const temporary = join(DATA_DIR, "server-data.tmp.json");
   await writeFile(temporary, JSON.stringify(store, null, 2), "utf8");
@@ -74,7 +171,7 @@ function sessionCookie(token) {
 async function createAccount(username, password) {
   const salt = randomBytes(16).toString("hex");
   const passwordHash = (await scrypt(password, salt, 64)).toString("hex");
-  return { id: randomBytes(16).toString("hex"), username, displayName: username, salt, passwordHash, progress: {} };
+  return { id: randomBytes(16).toString("hex"), username, displayName: username, salt, passwordHash, progress: {}, activity: [], createdAt: new Date().toISOString() };
 }
 
 function publicUser(user) {
@@ -84,6 +181,7 @@ function publicUser(user) {
     displayName: user.displayName || user.username,
     email: user.email || "",
     age: Number.isInteger(user.age) ? user.age : null,
+    isAdmin: isAdminUser(user),
   };
 }
 
@@ -144,11 +242,16 @@ async function route(request, response) {
           googleSubject: payload.sub,
           authProvider: "google",
           progress: {},
+          activity: [],
+          createdAt: new Date().toISOString(),
         };
         store.users[userKey] = user;
       }
-      await writeStore(store);
     }
+
+    user.lastLoginAt = new Date().toISOString();
+    recordActivity(user, "signed_in");
+    await writeStore(store);
 
     const token = randomBytes(32).toString("hex");
     sessions.set(token, { key: userKey, id: user.id, username: user.username });
@@ -169,11 +272,11 @@ async function route(request, response) {
     const key = username.toLocaleLowerCase();
     let user = store.users[key];
 
-    if (url.pathname.endsWith("/register")) {
+    const registering = url.pathname.endsWith("/register");
+    if (registering) {
       if (user) return send(response, 409, { error: "That username is already registered. Please sign in." });
       user = await createAccount(username, password);
       store.users[key] = user;
-      await writeStore(store);
     } else {
       if (!user) return send(response, 401, { error: "Username or password is incorrect." });
       const candidate = Buffer.from(await scrypt(password, user.salt, 64));
@@ -182,6 +285,10 @@ async function route(request, response) {
         return send(response, 401, { error: "Username or password is incorrect." });
       }
     }
+
+    user.lastLoginAt = new Date().toISOString();
+    recordActivity(user, registering ? "account_created" : "signed_in");
+    await writeStore(store);
 
     const token = randomBytes(32).toString("hex");
     sessions.set(token, { key, id: user.id, username: user.username });
@@ -200,16 +307,37 @@ async function route(request, response) {
 
   if ((request.method === "GET" || request.method === "HEAD") && !url.pathname.startsWith("/api/")) {
     const requestedPath = decodeURIComponent(url.pathname);
-    const candidate = resolve(DIST_DIR, "." + requestedPath);
-    if (candidate !== DIST_DIR && !candidate.startsWith(DIST_DIR + sep)) return send(response, 400, { error: "Invalid path." });
+    const candidate = resolve(DIST_DIR, `.${requestedPath}`);
+    if (candidate !== DIST_DIR && !candidate.startsWith(`${DIST_DIR}${sep}`)) {
+      return send(response, 400, { error: "Invalid path." });
+    }
     let filePath = candidate;
-    try { if (!(await stat(filePath)).isFile()) filePath = join(DIST_DIR, "index.html"); } catch { filePath = join(DIST_DIR, "index.html"); }
+    try {
+      if (!(await stat(filePath)).isFile()) filePath = join(DIST_DIR, "index.html");
+    } catch {
+      filePath = join(DIST_DIR, "index.html");
+    }
     try {
       const content = await readFile(filePath);
-      const types = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".ico": "image/x-icon", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".mp3": "audio/mpeg", ".png": "image/png", ".svg": "image/svg+xml", ".webp": "image/webp" };
-      response.writeHead(200, { "Content-Type": types[extname(filePath).toLowerCase()] || "application/octet-stream", "Cache-Control": filePath.endsWith("index.html") ? "no-cache" : "public, max-age=31536000, immutable" });
+      const types = {
+        ".css": "text/css; charset=utf-8",
+        ".html": "text/html; charset=utf-8",
+        ".ico": "image/x-icon",
+        ".js": "text/javascript; charset=utf-8",
+        ".json": "application/json; charset=utf-8",
+        ".mp3": "audio/mpeg",
+        ".png": "image/png",
+        ".svg": "image/svg+xml",
+        ".webp": "image/webp",
+      };
+      response.writeHead(200, {
+        "Content-Type": types[extname(filePath).toLowerCase()] || "application/octet-stream",
+        "Cache-Control": filePath.endsWith("index.html") ? "no-cache" : "public, max-age=31536000, immutable",
+      });
       return response.end(request.method === "HEAD" ? undefined : content);
-    } catch { return send(response, 404, { error: "Page not found. Build the website before starting the server." }); }
+    } catch {
+      return send(response, 404, { error: "Page not found. Build the website before starting the server." });
+    }
   }
 
   const session = getSessionUser(request);
@@ -220,6 +348,37 @@ async function route(request, response) {
     const user = store.users[session.key];
     if (!user) return send(response, 401, { error: "Please sign in again." });
     return send(response, 200, { user: publicUser(user) });
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/admin/summary") {
+    const store = await readStore();
+    const admin = store.users[session.key];
+    if (!admin || !isAdminUser(admin)) return send(response, 403, { error: "Admin access is not enabled for this account." });
+    const learners = Object.values(store.users).map((user) => ({
+      id: user.id,
+      username: user.username,
+      displayName: user.displayName || user.username,
+      email: user.email || "",
+      age: Number.isInteger(user.age) ? user.age : null,
+      authProvider: user.authProvider || "password",
+      createdAt: user.createdAt || null,
+      lastLoginAt: user.lastLoginAt || null,
+      lastActiveAt: user.lastActiveAt || null,
+      progress: user.progress || {},
+      activity: (user.activity || []).slice(0, 20),
+    }));
+    return send(response, 200, { learners });
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/activity") {
+    const body = await readBody(request);
+    const stage = String(body.stage || "").slice(0, 40);
+    const store = await readStore();
+    const user = store.users[session.key];
+    if (!user) return send(response, 401, { error: "Please sign in again." });
+    recordActivity(user, "stage_opened", stage);
+    await writeStore(store);
+    return send(response, 200, { ok: true });
   }
 
   if (url.pathname === "/api/profile" && request.method === "GET") {
@@ -251,6 +410,7 @@ async function route(request, response) {
     user.displayName = displayName;
     user.email = email;
     user.age = age;
+    recordActivity(user, "profile_updated");
     await writeStore(store);
     return send(response, 200, { profile: publicUser(user) });
   }
@@ -266,6 +426,8 @@ async function route(request, response) {
     const user = store.users[session.key];
     if (!user) return send(response, 401, { error: "Please sign in again." });
     user.progress = { ...user.progress, ...body };
+    const completedStages = Object.entries(user.progress.milestones || {}).filter(([, completed]) => completed).map(([stage]) => stage);
+    recordActivity(user, "progress_updated", completedStages.join(", "));
     await writeStore(store);
     return send(response, 200, { progress: user.progress });
   }

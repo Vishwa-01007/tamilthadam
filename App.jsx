@@ -13,6 +13,7 @@ import Reading from "./Reading";
 import Progress from "./Progress";
 import Thirukkural from "./Thirukkural";
 import Profile from "./Profile";
+import AdminDashboard from "./AdminDashboard";
 
 const STAGE_ORDER = ["letters", "writing", "reading", "thirukkural", "progress"];
 
@@ -50,6 +51,7 @@ function App() {
   const [showThirukkural, setShowThirukkural] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -134,6 +136,12 @@ function App() {
   });
 
   const openStage = (stage) => {
+    fetch("/api/activity", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ stage }),
+    }).catch(() => {});
     setShowDashboard(false);
     setShowLetters(false);
     setShowWriting(false);
@@ -176,6 +184,7 @@ function App() {
         milestones={completedStages}
         onBack={() => setShowProfile(false)}
         onUserUpdate={setCurrentUser}
+        onAdmin={() => { setShowProfile(false); setShowAdmin(true); }}
         onLogout={async () => {
           try {
             await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
@@ -189,6 +198,10 @@ function App() {
         }}
       />
     );
+  }
+
+  if (showAdmin) {
+    return <AdminDashboard onBack={() => { setShowAdmin(false); setShowProfile(true); }} />;
   }
 
   /* =====================================================

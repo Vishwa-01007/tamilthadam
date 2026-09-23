@@ -53,6 +53,8 @@
 .profile-progress li.is-complete { color: #176b3a; font-weight: 700; }
 .profile-progress li.is-complete span { color: #27864c; }
 .profile-logout { margin-top: 30px; padding: 10px 16px; border: 1px solid #d5e0d7; border-radius: 9px; background: #fff; color: #53635a; font-weight: 700; }
+.profile-admin { display: block; margin-top: 30px; padding: 11px 16px; border: 0; border-radius: 10px; background: #e9f5eb; color: #176b3a; font-weight: 700; }
+.profile-admin + .profile-logout { margin-top: 12px; }
 
 @media (max-width: 520px) {
   .profile-page { padding: 22px 14px 40px; }

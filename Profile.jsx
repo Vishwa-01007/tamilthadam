@@ -9,7 +9,7 @@ const STAGES = [
   ["progress", "Progress"],
 ];
 
-function Profile({ user, milestones, onBack, onLogout, onUserUpdate }) {
+function Profile({ user, milestones, onBack, onLogout, onUserUpdate, onAdmin }) {
   const [displayName, setDisplayName] = useState(user?.displayName || user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [age, setAge] = useState(user?.age ?? "");
@@ -117,6 +117,7 @@ function Profile({ user, milestones, onBack, onLogout, onUserUpdate }) {
           </ul>
         </section>
 
+        {user?.isAdmin && <button className="profile-admin" onClick={onAdmin}>Open admin learner database</button>}
         <button className="profile-logout" onClick={onLogout}>Sign out</button>
       </section>
     </main>
