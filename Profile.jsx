@@ -9,7 +9,7 @@ const STAGES = [
   ["progress", "Progress"],
 ];
 
-function Profile({ user, milestones, onBack, onLogout, onUserUpdate, onAdmin }) {
+function Profile({ user, milestones, learningTrack = "beginner", onBack, onLogout, onUserUpdate, onChangeLearningPath, onAdmin }) {
   const [displayName, setDisplayName] = useState(user?.displayName || user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [age, setAge] = useState(user?.age ?? "");
@@ -84,7 +84,9 @@ function Profile({ user, milestones, onBack, onLogout, onUserUpdate, onAdmin }) 
             maxLength={254}
             autoComplete="email"
             placeholder="you@example.com"
+            readOnly={user?.authProvider === "email-password"}
           />
+          {user?.authProvider === "email-password" && <small className="profile-email-note">Your verified email is used to sign in and cannot be changed here.</small>}
           <label htmlFor="profile-age">Age</label>
           <input
             id="profile-age"
@@ -102,7 +104,7 @@ function Profile({ user, milestones, onBack, onLogout, onUserUpdate, onAdmin }) 
           {message && <p className="profile-success" role="status">{message}</p>}
         </form>
 
-        <section className="profile-progress" aria-label="Learning progress">
+        {learningTrack === "beginner" ? <section className="profile-progress" aria-label="Learning progress">
           <div className="profile-progress-heading">
             <h2>Learning journey</h2>
             <strong>{completedCount} of {STAGES.length} milestones</strong>
@@ -115,9 +117,16 @@ function Profile({ user, milestones, onBack, onLogout, onUserUpdate, onAdmin }) 
               </li>
             ))}
           </ul>
-        </section>
+        </section> : <section className="profile-progress" aria-label="Learning path">
+          <div className="profile-progress-heading">
+            <h2>Learning path</h2>
+            <strong>Intermediate</strong>
+          </div>
+          <p>You can open any stage in any order. Your certificate becomes available at 70% overall progress.</p>
+        </section>}
 
-        {user?.isAdmin && <button className="profile-admin" onClick={onAdmin}>Open admin learner database</button>}
+        <button className="profile-change-path" onClick={onChangeLearningPath}>← Change learning path</button>
+        {user?.isAdmin && <button className="profile-change-path" onClick={onAdmin}>Open learner database</button>}
         <button className="profile-logout" onClick={onLogout}>Sign out</button>
       </section>
     </main>

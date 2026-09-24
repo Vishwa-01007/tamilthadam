@@ -446,6 +446,147 @@ font-family: "Noto Sans Tamil", sans-serif;
   color: #27864c;
 }
 
+.about-voice-assistant {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.about-voice-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.about-voice-button {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: #168553;
+  box-shadow: 0 8px 20px rgb(22 133 83 / 22%);
+  font-size: 23px;
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.about-voice-button:hover {
+  transform: translateY(-2px);
+  background: #116b42;
+  box-shadow: 0 11px 24px rgb(22 133 83 / 28%);
+}
+
+.about-voice-button:focus-visible {
+  outline: 3px solid #94d4ae;
+  outline-offset: 3px;
+}
+
+.about-voice-button.is-listening {
+  animation: voice-pulse 1.2s ease-in-out infinite;
+}
+
+.about-voice-label {
+  color: #176b43;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.about-voice-hint {
+  margin: 4px 0 0;
+  color: #53635a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.about-translate-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.about-translate-form input {
+  min-width: 0;
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d7e4da;
+  border-radius: 10px;
+  color: #17251d;
+  background: #fff;
+  font: inherit;
+}
+
+.about-translate-form input:focus-visible {
+  outline: 3px solid #b5dfc4;
+  border-color: #168553;
+}
+
+.about-translate-form button,
+.about-translation-result button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  background: #168553;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.about-translate-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.about-translation-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px;
+  border: 1px solid #d8e9dc;
+  border-radius: 12px;
+  background: #f2faf4;
+}
+
+.about-translation-caption {
+  color: #53635a;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.about-translation-result strong {
+  color: #176b43;
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 23px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.about-voice-status {
+  margin: 0;
+  color: #53635a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@keyframes voice-pulse {
+  50% { box-shadow: 0 0 0 9px rgb(22 133 83 / 13%); }
+}
+
 .about-text {
   max-width: 650px;
 }

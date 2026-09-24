@@ -11,7 +11,7 @@ function escapeXml(value) {
   })[character]);
 }
 
-function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete = false }) {
+function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete = false, learningTrack = "beginner" }) {
   const [readingData, setReadingData] = useState({
     words: [],
     sentences: [],
@@ -151,6 +151,12 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
       totalLearningActivities) *
       100
   );
+  const certificateThreshold = learningTrack === "intermediate" ? 70 : 100;
+  const canEarnCertificate = overallPercentage >= certificateThreshold;
+  const certificateTitle = learningTrack === "intermediate" ? "CERTIFICATE OF ACHIEVEMENT" : "CERTIFICATE OF COMPLETION";
+  const certificateDescription = learningTrack === "intermediate"
+    ? "for reaching at least 70% progress in the Tamil learning journey."
+    : "for successfully completing the Tamil learning journey.";
 
   /* =====================================================
      STAGES
@@ -194,13 +200,13 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
       <rect width="1200" height="800" fill="#fbfdf9"/>
       <rect x="28" y="28" width="1144" height="744" rx="20" fill="#fff" stroke="#27864c" stroke-width="6"/>
       <rect x="48" y="48" width="1104" height="704" rx="12" fill="none" stroke="#d7b85a" stroke-width="2"/>
-      <text x="600" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" letter-spacing="7" fill="#27864c">CERTIFICATE OF COMPLETION</text>
+      <text x="600" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" letter-spacing="7" fill="#27864c">${certificateTitle}</text>
       <text x="600" y="235" text-anchor="middle" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#111111">TamilThadam</text>
       <line x1="380" y1="270" x2="820" y2="270" stroke="#d7b85a" stroke-width="3"/>
       <text x="600" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#536158">This certificate is proudly presented to</text>
       <text x="600" y="445" text-anchor="middle" font-family="Arial, 'Noto Sans Tamil', 'Latha', sans-serif" font-size="58" font-weight="700" fill="#27864c">${escapeXml(name)}</text>
       <line x1="300" y1="465" x2="900" y2="465" stroke="#27864c" stroke-width="2"/>
-      <text x="600" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#536158">for successfully completing the Tamil learning journey.</text>
+      <text x="600" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#536158">${escapeXml(certificateDescription)}</text>
       <text x="600" y="600" text-anchor="middle" font-family="'Noto Sans Tamil', 'Latha', sans-serif" font-size="30" fill="#27864c">தமிழ் கற்றல் நிறைவு</text>
       <text x="600" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#68756c">Awarded on ${escapeXml(date)}</text>
     </svg>`;
@@ -626,7 +632,7 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
 
       </section>
 
-      <section className="journey-final-milestone" aria-live="polite">
+      {learningTrack === "beginner" && <section className="journey-final-milestone" aria-live="polite">
         {journeyComplete ? (
           <>
             <span className="final-milestone-icon" aria-hidden="true">🎉</span>
@@ -654,13 +660,13 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
             </button>
           </>
         )}
-      </section>
+      </section>}
 
       {/* =================================================
           CERTIFICATE
       ================================================= */}
 
-      {overallPercentage === 100 && (
+      {canEarnCertificate && (
         <section className="certificate-section">
 
           {!showCertificate ? (
@@ -674,8 +680,9 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
               </h2>
 
               <p>
-                You have completed your Tamil
-                learning journey.
+                {learningTrack === "intermediate"
+                  ? "You reached the 70% progress target for your intermediate certificate."
+                  : "You have completed your Tamil learning journey."}
               </p>
 
               <input
@@ -701,7 +708,7 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
               </div>
 
               <span>
-                CERTIFICATE OF COMPLETION
+                {certificateTitle}
               </span>
 
               <h2>
@@ -718,8 +725,7 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
               </h1>
 
               <p>
-                for successfully completing
-                the Tamil learning journey.
+                {certificateDescription}
               </p>
 
               <strong>

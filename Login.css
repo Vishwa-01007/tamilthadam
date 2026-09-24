@@ -109,6 +109,45 @@
   box-shadow: 0 0 0 3px rgba(34, 164, 71, 0.12);
 }
 
+.login-password-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.login-password-field input {
+  margin-bottom: 0;
+  padding-right: 68px;
+}
+
+.login-content form .password-visibility-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: auto;
+  margin: 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #198754;
+  font-size: 13px;
+  font-weight: 700;
+  transform: translateY(-50%);
+  transition: color 0.2s, background 0.2s;
+}
+
+.login-content form .password-visibility-toggle:hover:not(:disabled) {
+  background: #e8f4eb;
+  color: #146c43;
+  transform: translateY(-50%);
+}
+
+.login-content input[readonly] {
+  color: #475569;
+  background: #f8faf9;
+}
+
 .login-content form button {
   margin-top: 8px;
   padding: 15px;
@@ -135,6 +174,13 @@
 .login-error {
   margin: -8px 0 12px;
   color: #a12a26;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.login-notice {
+  margin: -8px 0 14px;
+  color: #166534;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -179,6 +225,14 @@
   text-align: center;
   font-size: 13px !important;
   color: #94a3b8 !important;
+}
+
+.login-secondary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 .login-content .login-mode-toggle {

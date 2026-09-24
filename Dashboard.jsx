@@ -1,6 +1,7 @@
 import "./Dashboard.css";
 
-function Dashboard({ onBack, stages = [], onStageSelect }) {
+function Dashboard({ onBack, onChangeLearningPath, stages = [], onStageSelect, learningTrack = "beginner" }) {
+  const beginner = learningTrack === "beginner";
   const completedCount = stages.filter((stage) => stage.completed).length;
   const learningStageCount = stages.filter((stage) => stage.key !== "progress").length;
   const percent = Math.round((completedCount / learningStageCount) * 100);
@@ -10,23 +11,26 @@ function Dashboard({ onBack, stages = [], onStageSelect }) {
       <button className="back-button" onClick={onBack}>
         ← Back to Home
       </button>
+      <button className="back-button dashboard-change-path" onClick={onChangeLearningPath}>
+        ← Change learning path
+      </button>
 
       <header className="dashboard-header">
         <div>
           <p className="dashboard-label">தமிழ் கற்றல் பயணம்</p>
           <h1>வணக்கம்! 👋</h1>
-          <p>Complete each milestone to unlock your next Tamil lesson.</p>
+          <p>{beginner ? "Complete each milestone to unlock your next Tamil lesson." : "Choose any Tamil stage and explore in any order."}</p>
         </div>
 
         <div className="progress-box">
-          <span>Learning Milestones</span>
-          <strong>{percent}%</strong>
+          <span>{beginner ? "Learning Milestones" : "Stages Explored"}</span>
+          <strong>{beginner ? `${percent}%` : "Open"}</strong>
         </div>
       </header>
 
       <section className="dashboard-intro">
         <h2>Your learning path</h2>
-        <p>Complete each stage to unlock the next. Finish Thirukkural to open Progress.</p>
+        <p>{beginner ? "Complete each stage to unlock the next. Finish Thirukkural to open Progress." : "All stages are open. Visit them in whichever order works for you."}</p>
       </section>
 
       <section className="learning-cards">
@@ -39,9 +43,9 @@ function Dashboard({ onBack, stages = [], onStageSelect }) {
             <div className="card-icon">{stage.icon}</div>
             <h3>{stage.title}</h3>
             <p>{stage.text}</p>
-            <div className={`dashboard-milestone ${stage.completed ? "complete" : ""}`}>
+            {beginner && <div className={`dashboard-milestone ${stage.completed ? "complete" : ""}`}>
               {stage.completed ? "🏆" : stage.locked ? "🔒" : "⭐"} {stage.status}
-            </div>
+            </div>}
             <button
               disabled={stage.locked}
               onClick={() => onStageSelect?.(stage.key)}

@@ -170,6 +170,10 @@
   background: #f0fdf4;
 }
 
+.dashboard-change-path {
+  top: 66px;
+}
+
 @media (max-width: 640px) {
   .dashboard {
     padding: 84px 18px 36px;

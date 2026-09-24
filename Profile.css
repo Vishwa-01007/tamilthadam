@@ -36,6 +36,7 @@
 .profile-form input { width: 100%; padding: 13px 15px; border: 1px solid #d5e0d7; border-radius: 10px; color: #17251d; background: #fff; font: inherit; }
 .profile-form input:focus { border-color: #27864c; outline: 3px solid rgba(39, 134, 76, .12); }
 .profile-form input[readonly] { color: #718078; background: #f6f8f6; }
+.profile-email-note { margin: 6px 0 2px; color: #64748b; font-size: 12px; line-height: 1.4; }
 .profile-form button { align-self: flex-start; margin-top: 20px; padding: 12px 20px; border: 0; border-radius: 10px; color: white; background: #27864c; font-weight: 700; }
 .profile-form button:disabled { opacity: .65; cursor: wait; }
 .profile-error, .profile-success { margin: 12px 0 0; font-size: 14px; }
@@ -53,8 +54,8 @@
 .profile-progress li.is-complete { color: #176b3a; font-weight: 700; }
 .profile-progress li.is-complete span { color: #27864c; }
 .profile-logout { margin-top: 30px; padding: 10px 16px; border: 1px solid #d5e0d7; border-radius: 9px; background: #fff; color: #53635a; font-weight: 700; }
-.profile-admin { display: block; margin-top: 30px; padding: 11px 16px; border: 0; border-radius: 10px; background: #e9f5eb; color: #176b3a; font-weight: 700; }
-.profile-admin + .profile-logout { margin-top: 12px; }
+.profile-change-path { margin: 24px 10px 0 0; padding: 10px 16px; border: 1px solid #c9dfcf; border-radius: 9px; background: #eef7f0; color: #176b3a; font-weight: 700; cursor: pointer; }
+.profile-change-path:hover { background: #e0f0e4; }
 
 @media (max-width: 520px) {
   .profile-page { padding: 22px 14px 40px; }

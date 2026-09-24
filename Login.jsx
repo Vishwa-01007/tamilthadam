@@ -1,117 +1,105 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "./Login.css";
 
 function Login({ onLogin }) {
   const [mode, setMode] = useState("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [code, setCode] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
-  const googleButtonRef = useRef(null);
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
+  const isRegistering = mode === "register";
 
-  useEffect(() => {
-    if (!googleClientId || !googleButtonRef.current) return undefined;
-    let active = true;
-
-    const renderGoogleButton = () => {
-      if (!active || !window.google?.accounts?.id || !googleButtonRef.current) return;
-      window.google.accounts.id.initialize({
-        client_id: googleClientId,
-        callback: async ({ credential }) => {
-          if (!credential) return;
-          setBusy(true);
-          setError("");
-          try {
-            const response = await fetch("/api/auth/google", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "same-origin",
-              body: JSON.stringify({ credential }),
-            });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || "Could not sign in with Google.");
-            onLogin(result.user);
-          } catch (requestError) {
-            setError(
-              requestError.message.includes("Failed to fetch")
-                ? "The backend is not running yet. Start the backend, then try again."
-                : requestError.message
-            );
-          } finally {
-            setBusy(false);
-          }
-        },
-      });
-      googleButtonRef.current.replaceChildren();
-      window.google.accounts.id.renderButton(googleButtonRef.current, {
-        type: "standard",
-        theme: "outline",
-        size: "large",
-        shape: "rectangular",
-        text: "continue_with",
-        width: 320,
-      });
-    };
-
-    let script = document.getElementById("google-identity-services");
-    if (window.google?.accounts?.id) {
-      renderGoogleButton();
-    } else if (!script) {
-      script = document.createElement("script");
-      script.id = "google-identity-services";
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.addEventListener("load", renderGoogleButton);
-      script.addEventListener("error", () => setError("Google sign-in could not load. Check your internet connection."), { once: true });
-      document.head.appendChild(script);
-    } else {
-      script.addEventListener("load", renderGoogleButton);
-    }
-
-    return () => {
-      active = false;
-      script?.removeEventListener("load", renderGoogleButton);
-    };
-  }, [googleClientId, onLogin]);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const submit = async (path, payload, genericError) => {
     setError("");
+    setNotice("");
     setBusy(true);
-
-    const formData = new FormData(event.currentTarget);
-    const username = String(formData.get("username") || "").trim();
-    const password = String(formData.get("password") || "");
-    const confirmPassword = String(formData.get("confirmPassword") || "");
-
-    if (mode === "register" && password !== confirmPassword) {
-      setError("The passwords do not match. Please check them and try again.");
-      setBusy(false);
-      return;
-    }
-
     try {
-      const response = await fetch(`/api/auth/${mode === "register" ? "register" : "login"}`, {
+      const response = await fetch(`/api/auth/${path}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(payload),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Could not sign in.");
-      onLogin(result.user);
+      if (!response.ok) throw new Error(result.error || genericError);
+      return result;
     } catch (requestError) {
       setError(
         requestError.message.includes("Failed to fetch")
-          ? "The backend is not running yet. Start the backend, then try again."
+          ? "The sign-in service could not be reached. Please try again shortly."
           : requestError.message
       );
+      return null;
     } finally {
       setBusy(false);
     }
   };
 
-  const isRegistering = mode === "register";
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const normalizedEmail = email.trim().toLocaleLowerCase();
+    setEmail(normalizedEmail);
+
+    if (!isRegistering) {
+      const result = await submit("login", { email: normalizedEmail, password }, "Could not sign in.");
+      if (result?.user) onLogin(result.user);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("The passwords do not match. Please check them and try again.");
+      return;
+    }
+
+    if (!codeSent) {
+      const result = await submit("send-code", { email: normalizedEmail }, "Could not send a verification code.");
+      if (result) {
+        setCodeSent(true);
+        setNotice(result.developmentCode
+          ? `Local test code: ${result.developmentCode}. Enter it above; it expires in 10 minutes.`
+          : `A verification code was sent to ${normalizedEmail}. It expires in 10 minutes.`);
+      }
+      return;
+    }
+
+    const result = await submit("verify-code", {
+      email: normalizedEmail,
+      code,
+      password,
+      confirmPassword,
+    }, "Could not verify your email.");
+    if (result?.user) onLogin(result.user);
+  };
+
+  const resendCode = async () => {
+    const result = await submit("send-code", { email }, "Could not send a new verification code.");
+    if (result) setNotice(result.developmentCode
+      ? `New local test code: ${result.developmentCode}. The previous code is no longer valid.`
+      : `A new verification code was sent to ${email}. The previous code is no longer valid.`);
+  };
+
+  const changeMode = () => {
+    setMode(isRegistering ? "login" : "register");
+    setCodeSent(false);
+    setCode("");
+    setPassword("");
+    setConfirmPassword("");
+    setError("");
+    setNotice("");
+  };
+
+  const changeEmail = () => {
+    setCodeSent(false);
+    setCode("");
+    setError("");
+    setNotice("");
+  };
 
   return (
     <div className="login-page">
@@ -124,77 +112,114 @@ function Login({ onLogin }) {
 
         <div className="login-content">
           <h2>{isRegistering ? "Create your account" : "Welcome to TamilThadam"}</h2>
-          <p>{isRegistering ? "Save your Tamil learning journey." : "Sign in to continue your Tamil learning journey."}</p>
+          <p>{isRegistering ? "Verify your email once to create your account." : "Sign in with your email and password."}</p>
 
           <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">{isRegistering ? "Email address" : "Email or username"}</label>
             <input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Enter your username"
-              minLength={2}
-              maxLength={40}
-              autoComplete="username"
+              id="email"
+              name="email"
+              type={isRegistering ? "email" : "text"}
+              placeholder={isRegistering ? "you@example.com" : "Enter your email or username"}
+              maxLength={254}
+              autoComplete="email"
+              value={email}
+              onChange={(event) => { setEmail(event.target.value); setError(""); setNotice(""); }}
+              readOnly={codeSent}
               required
             />
 
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder={isRegistering ? "At least 8 characters" : "Enter your password"}
-              minLength={8}
-              maxLength={200}
-              autoComplete={isRegistering ? "new-password" : "current-password"}
-              required
-            />
+            <div className="login-password-field">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder={isRegistering ? "At least 8 characters" : "Enter your password"}
+                minLength={8}
+                maxLength={200}
+                autoComplete={isRegistering ? "new-password" : "current-password"}
+                value={password}
+                onChange={(event) => { setPassword(event.target.value); setError(""); }}
+                required
+              />
+              <button
+                className="password-visibility-toggle"
+                type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+                onClick={() => setShowPassword((visible) => !visible)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
 
             {isRegistering && (
               <>
                 <label htmlFor="confirmPassword">Confirm password</label>
+                <div className="login-password-field">
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Enter your password again"
+                    minLength={8}
+                    maxLength={200}
+                    autoComplete="new-password"
+                    value={confirmPassword}
+                    onChange={(event) => { setConfirmPassword(event.target.value); setError(""); }}
+                    required
+                  />
+                  <button
+                    className="password-visibility-toggle"
+                    type="button"
+                    aria-label={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"}
+                    aria-pressed={showConfirmPassword}
+                    onClick={() => setShowConfirmPassword((visible) => !visible)}
+                  >
+                    {showConfirmPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </>
+            )}
+
+            {isRegistering && codeSent && (
+              <>
+                <label htmlFor="emailCode">Email verification code</label>
                 <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Enter your password again"
-                  minLength={8}
-                  maxLength={200}
-                  autoComplete="new-password"
+                  id="emailCode"
+                  name="emailCode"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]{6}"
+                  placeholder="Enter the 6-digit code"
+                  maxLength={6}
+                  autoComplete="one-time-code"
+                  value={code}
+                  onChange={(event) => { setCode(event.target.value.replace(/\D/g, "").slice(0, 6)); setError(""); }}
                   required
                 />
               </>
             )}
 
             {error && <p className="login-error" role="alert">{error}</p>}
+            {notice && <p className="login-notice" role="status">{notice}</p>}
 
             <button type="submit" disabled={busy}>
-              {busy ? "Please wait…" : isRegistering ? "Create Account" : "Sign In"}
+              {busy ? "Please wait…" : isRegistering ? (codeSent ? "Verify email and create account" : "Send verification code") : "Sign In"}
             </button>
           </form>
 
-          <div className="login-divider"><span>or</span></div>
-          {googleClientId ? (
-            <div className="google-signin-wrap">
-              <div ref={googleButtonRef} />
+          {isRegistering && codeSent && (
+            <div className="login-secondary-actions">
+              <button type="button" className="login-mode-toggle" onClick={resendCode} disabled={busy}>Send a new code</button>
+              <button type="button" className="login-mode-toggle" onClick={changeEmail}>Use a different email</button>
             </div>
-          ) : (
-            <p className="google-signin-setup" role="note">
-              Google sign-in is ready to connect once a Google OAuth Web Client ID is added.
-            </p>
           )}
 
           <p className="login-note">
             {isRegistering ? "Already have an account?" : "New learner?"}{" "}
-            <button
-              type="button"
-              className="login-mode-toggle"
-              onClick={() => {
-                setError("");
-                setMode(isRegistering ? "login" : "register");
-              }}
-            >
+            <button type="button" className="login-mode-toggle" onClick={changeMode}>
               {isRegistering ? "Sign in" : "Create an account"}
             </button>
           </p>

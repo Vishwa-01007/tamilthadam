@@ -1,0 +1,116 @@
+.learner-path-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 40px 20px;
+  background: linear-gradient(140deg, #edf8f0 0%, #f7fbf7 50%, #e4f3e8 100%);
+}
+
+.learner-path-card {
+  width: min(760px, 100%);
+  padding: clamp(28px, 6vw, 56px);
+  border: 1px solid #d6e9da;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(19, 91, 53, 0.12);
+  text-align: center;
+}
+
+.learner-path-eyebrow {
+  color: #16804b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.learner-path-card h1 {
+  margin: 12px 0 8px;
+  color: #163b2a;
+  font-size: clamp(30px, 5vw, 42px);
+}
+
+.learner-path-intro,
+.learner-path-footnote {
+  color: #617268;
+  line-height: 1.6;
+}
+
+.learner-path-options {
+  display: grid;
+  gap: 16px;
+  margin-top: 32px;
+  text-align: left;
+}
+
+.learner-path-option {
+  display: grid;
+  grid-template-columns: 52px 1fr 24px;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #dce9df;
+  border-radius: 18px;
+  background: #fbfdfb;
+  color: #193a29;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.learner-path-option:hover,
+.learner-path-option:focus-visible,
+.learner-path-option.selected {
+  border-color: #18804b;
+  box-shadow: 0 8px 24px rgba(24, 128, 75, 0.13);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.learner-path-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 15px;
+  background: #e8f5eb;
+  font-size: 26px;
+}
+
+.learner-path-option-copy {
+  display: grid;
+  gap: 5px;
+}
+
+.learner-path-option-copy strong {
+  font-size: 18px;
+}
+
+.learner-path-option-copy > span {
+  color: #617268;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.learner-path-arrow {
+  color: #16804b;
+  font-size: 24px;
+}
+
+.learner-path-footnote {
+  margin: 20px 0 0;
+  font-size: 13px;
+}
+
+@media (max-width: 520px) {
+  .learner-path-option {
+    grid-template-columns: 44px 1fr 18px;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .learner-path-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
