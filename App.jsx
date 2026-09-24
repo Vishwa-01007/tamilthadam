@@ -421,6 +421,7 @@ function App() {
     return (
       <Writing
         onBack={() => setShowWriting(false)}
+        onComplete={() => markStageComplete("writing")}
         onLevel2={() => {
           setShowWriting(false);
           setShowWritingLevel2(true);
@@ -478,6 +479,8 @@ function App() {
         onComplete={() => markStageComplete("progress")}
         journeyComplete={completedStages.progress}
         kuralComplete={completedStages.thirukkural}
+        lettersComplete={completedStages.letters}
+        writingComplete={completedStages.writing}
         learningTrack={learningTrack}
       />
     );

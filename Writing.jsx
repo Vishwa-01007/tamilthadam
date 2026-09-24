@@ -20,7 +20,7 @@ const MATCH_SIZE = 180;
 const PADDING = 18;
 const MATCH_THRESHOLD = 0.85;
 
-function Writing({ onBack, onLevel2, level = 1 }) {
+function Writing({ onBack, onLevel2, onComplete, level = 1 }) {
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
   const hasDrawingRef = useRef(false);
@@ -538,6 +538,7 @@ function Writing({ onBack, onLevel2, level = 1 }) {
       */
 
       setResult("completed");
+      onComplete?.();
     }
   }
 
@@ -560,6 +561,7 @@ function Writing({ onBack, onLevel2, level = 1 }) {
       */
 
       setResult("completed");
+      onComplete?.();
     }
   }
 

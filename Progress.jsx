@@ -11,7 +11,7 @@ function escapeXml(value) {
   })[character]);
 }
 
-function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete = false, learningTrack = "beginner" }) {
+function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete = false, lettersComplete = false, writingComplete = false, learningTrack = "beginner" }) {
   const [readingData, setReadingData] = useState({
     words: [],
     sentences: [],
@@ -114,8 +114,8 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
      24 EXERCISES
   ===================================================== */
 
-  const writingCompleted = 24;
-  const writingTotal = 24;
+  const writingTotal = 12;
+  const writingCompleted = writingComplete ? writingTotal : 0;
 
   const writingPercentage = Math.round(
     (writingCompleted / writingTotal) * 100
@@ -125,8 +125,8 @@ function Progress({ onBack, onComplete, journeyComplete = false, kuralComplete =
      LETTER PROGRESS
   ===================================================== */
 
-  const lettersCompleted = 247;
-  const lettersTotal = 247;
+  const lettersTotal = 30;
+  const lettersCompleted = lettersComplete ? lettersTotal : 0;
 
   const lettersPercentage = Math.round(
     (lettersCompleted / lettersTotal) * 100
